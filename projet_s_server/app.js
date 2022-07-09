@@ -12,7 +12,6 @@ const prisma = new PrismaClient()
 
 
 const route = require('./routes');
-const { register } = require('./services/auth.service');
 const RegistrationService = require('./subscribers/user/register');
 const GetMyUserService = require('./subscribers/user/me');
 app.use('/', route);
@@ -34,8 +33,3 @@ main()
   .finally(async () => {
     await prisma.$disconnect()
   })
-
-  function initializeServices() {
-    new RegistrationService();
-    new GetMyUserService();
-  }
