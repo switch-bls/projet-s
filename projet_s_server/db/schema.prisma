@@ -1,0 +1,87 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Message {
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  content String?
+  author User @relation(fields: [authorId], references: [id])
+  authorId Int
+  event Event @relation(fields: [eventId], references: [id])
+  eventId Int
+  
+}
+
+model User {
+  id Int @id @default(autoincrement())
+  email String @unique
+  firstname String?
+  lastname String?
+  pseudo String
+  password String
+  messages Message[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  participate Participate[]
+  friendRequested FriendRequest[]  @relation( name : "requested")
+  friendRequester FriendRequest[]  @relation( name : "requester")
+  friend1 Friend[]  @relation( name : "friend1")
+  friend2 Friend[]  @relation( name : "friend2")
+}
+
+model Event {
+  id Int @id @default(autoincrement())
+  name String
+  description String
+  date DateTime @updatedAt
+  place DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  max_guest Int @default(10)
+  messages Message[]
+  participant Participate[]
+}
+
+model Participate{
+  event Event @relation(fields: [eventId], references: [id])
+  eventId Int
+  participant User @relation(fields: [participantId], references: [id])
+  participantId Int
+  status ParticipantStatus
+  @@id([eventId,participantId])
+}
+
+model FriendRequest{
+  friendRequested User @relation(fields: [friendRequestedId], references: [id], name : "requested")
+  friendRequestedId Int
+  friendRequester User @relation(fields: [friendRequesterId], references: [id], name : "requester")
+  friendRequesterId Int
+  @@id([friendRequestedId,friendRequesterId])
+}
+
+model Friend{
+  friend1 User @relation(fields: [friend1Id], references: [id], name : "friend1")
+  friend1Id Int
+  friend2 User @relation(fields: [friend2Id], references: [id], name : "friend2")
+  friend2Id Int
+  @@id([friend1Id,friend2Id])
+}
+
+enum ParticipantStatus{
+  HOST
+  GUEST
+}
+
+
+
+
