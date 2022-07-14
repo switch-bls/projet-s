@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken')
 const createError = require('http-errors')
 require('dotenv').config()
-
 const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET
 
 module.exports = {
@@ -27,5 +26,10 @@ module.exports = {
                 resolve(payload)
             })
         })
+    },
+    getDataFromToken(token){
+        const token_payload = token.split(' ')[1]
+        return jwt.verify(token_payload, accessTokenSecret)
     }
+
 }

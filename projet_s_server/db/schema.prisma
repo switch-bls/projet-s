@@ -7,7 +7,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = "postgresql://postgres:Wilson88@localhost:5432/projet-s-test?schema=public"
 }
 
 model Message {
