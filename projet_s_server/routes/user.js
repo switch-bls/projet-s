@@ -1,14 +1,17 @@
 const router = require('express').Router();
-const user = require('../controllers/user.controller');
 const auth = require('../middlewares/auth');
+
+const container = require('../denpendency-injection')
+const userController = container.resolve('userController')
+
 // all users
-router.get('/all', user.all);
+router.get('/all', userController.all);
 // get current user
-router.get('/me', auth, user.me);
+router.get('/me', auth, userController.me);
 // get user by id
-router.get('/id/:id',  user.userById);
+router.get('/id/:id', userController.userById);
 // update user
-router.post('/update', auth, user.update);
+router.post('/update', auth, userController.update);
 // delete user
-router.post('/delete', auth, user.delete);
+router.post('/delete', auth, userController.delete);
 module.exports = router; 

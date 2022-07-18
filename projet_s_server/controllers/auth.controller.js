@@ -1,15 +1,16 @@
-
-const { PrismaClient, Prisma } = require('@prisma/client');
-const auth = require('../services/auth.service');
 const createError = require('http-errors');
 require('dotenv').config()
-const jwt = require('jsonwebtoken')
 
 class AuthController {
-    static register = async (req, res, next) => {
-        try {
 
-            const user = await auth.register(req.body);
+    constructor(authService) {
+        console.log('auth controller created')
+        this.authService = authService
+    }
+
+    register = async (req, res, next) => {
+        try {
+            const user = await this.authService.register(req.body);
 
             res.status(200).json({
                 status: true,
@@ -22,10 +23,10 @@ class AuthController {
             next(createError(e.statusCode, e.message))
         }
     }
-    static login = async (req, res, next) => {
-        console.log('Login Service Requested')
+
+    login = async (req, res, next) => {
         try {
-            const data = await auth.login(req.body)
+            const data = await this.authService.login(req.body)
             res.status(200).json({
                 status: true,
                 message: "Account login successful",

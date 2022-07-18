@@ -1,14 +1,19 @@
-const { PrismaClient, Prisma } = require('@prisma/client');
-const user = require('../services/user.service');
 const createError = require('http-errors');
 require('dotenv').config()
 const jwt = require('../utils/jwt');
 
 class UserController {
-    static all = async (req, res, next) => {
+
+    constructor(userService) {
+        console.log('user controller created')
+        this.userService = userService
+        
+    }
+
+    all = async (req, res, next) => {
         try {
             console.log('All Users Getter Service Requested')
-            const users = await user.all();
+            const users = await this.userService.all();
             res.status(200).json({
                 status: true,
                 message: 'All users',
@@ -17,16 +22,17 @@ class UserController {
             console.log('All Getter Service Requested')
         }
         catch (e) {
-            next(console.log(e.statusCode, e.message))
+            console.log(e)
+            next()
         }
     }
 
-    static userById = async (req, res, next) => {
+    userById = async (req, res, next) => {
         try {
             console.log('User Getter Service Requested')
             var id = req.params.id
 
-            const user = await user.userById(id);
+            const user = await this.userService.userById(id);
             res.status(200).json({
                 status: true,
                 message: 'User info',
@@ -34,16 +40,17 @@ class UserController {
             })
         }
         catch (e) {
-            next(console.log(e.statusCode, e.message))
+            console.log(e)
+            next()
         }
     }
 
-    static me = async (req, res, next) => {
+    me = async (req, res, next) => {
         try {
             console.log('Current User Getter Service Requested')
             const data = jwt.getDataFromToken(req.headers.authorization)
             console.log(data)
-            const me = await user.userById(data.payload.id);
+            const me = await this.userService.userById(data.payload.id);
             res.status(200).json({
                 status: true,
                 message: 'My info',
@@ -52,17 +59,18 @@ class UserController {
 
         }
         catch (e) {
-            next(console.log(e.statusCode, e.message))
+            console.log(e)
+            next()
         }
     }
 
-    static update = async (req, res, next) => {
+    update = async (req, res, next) => {
         try {
             const logged_user_id = jwt.getDataFromToken(req.headers.authorization).payload.id
 
             console.log(logged_user_id + ': User Update Service Requested')
 
-            const user_to_update = await user.update(logged_user_id, req.body);
+            const user_to_update = await this.userService.update(logged_user_id, req.body);
             res.status(200).json({
                 status: true,
                 message: 'User info Succesfully updated',
@@ -75,7 +83,7 @@ class UserController {
         }
     }
 
-    static delete = async (req, res, next) => {
+     delete = async (req, res, next) => {
         try {
             console.log('User Deletion Service Requested')
             const id_to_delete = jwt.getDataFromToken(req.headers.authorization).payload.id

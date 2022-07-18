@@ -6,86 +6,48 @@ require('dotenv').config()
 const bcrypt = require('bcryptjs');
 const jwt = require('../utils/jwt');
 
+
 class UserService {
+
+    constructor(userRepository ) {
+        console.log('user service created')
+        this.userRepository = userRepository
+    }
+
     //return all the users
-    static async all() {
-        const allUsers = await prisma.user.findMany();
+    async all() {
+        const allUsers = await this.userRepository.findAll()
         return allUsers;
     }
 
     //return the user
-    static async userById(id) {
-        console.log(id + ' id')
-        const user = await prisma.user.findFirst({
-            where: {
-                id: parseInt(id)
-            }
-        });
+     async userById(id) {
+        console.log('id: ' +id )
+        const user = await this.userRepository.findByID(id)
         console.log(user)
         return user;
     }
 
     //return the user
-    static async userByEmail(email) {
-        const user = await prisma.user.findFirst({
-            where: {
-                email
-            }
-        });
-        if (!user) {
-            console.log('User not registered')
-            throw createError.NotFound('User not registered')
-        }
+     async userByEmail(email) {
+        const user = await this.userRepository.findByEmail(email)
         console.log(user)
         return user;
     }
 
     //create a new user
-    static async create(data) {
-        try {
-            await prisma.user.create({
-                data
-            })
-        } catch (e) {
-            if (e instanceof Prisma.PrismaClientKnownRequestError) {
-                if (e.code === 'P2002') {
-                    throw createError(409,
-                        'There is a unique constraint violation, a new user cannot be created with this email'
-                    )
-                }
-            }
-        }
+     async create(data) {
+        await this.userRepository.create(data)
     }
 
     //update a new user
-    static async update(id, data) {
-        data.id = id
-        delete data.password
-        delete data.email
-        try {
-            await prisma.user.update({
-                where: {
-                    id : data.id,
-                  },
-                data
-            })
-        } catch (e) {
-            throw e
-        }
+     async update(id, data) {
+        await this.userRepository.update(id, data)
     }
 
     //delete the user
-    static async deleteById(id) {
-        try {
-            await prisma.user.delete({
-                where: {
-                    id : id,
-                  }
-            })
-        } catch (e) {
-            console.log(e)
-            throw e
-        }
+     async deleteById(id) {
+        await this.userRepository.delete(id)
     }
 }
 

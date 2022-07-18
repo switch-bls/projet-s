@@ -1,8 +1,12 @@
 const router = require('express').Router();
-const userauth = require('../controllers/auth.controller');
+
+const container  = require('../denpendency-injection')
+
+const authController = container.resolve('authController')
+
 // register
-router.post('/', userauth.register);
+router.post('/', authController.register);
 // login
-router.post('/login', userauth.login);
+router.post('/login', authController.login);
 
 module.exports = router; 
