@@ -8,13 +8,12 @@ const UserRepositoryImpl = require('./repositories/user.repositoryImpl')
 
 const awilix = require('awilix')
 
-// Create the container and set the injectionMode to PROXY (which is also the default).
+// Create the container and set the injectionMode to CLASSIC 
 const container = awilix.createContainer({
   injectionMode: awilix.InjectionMode.CLASSIC
 })
 
 container.register({
-
     userRepository: awilix.asClass(UserRepositoryImpl),
     userService: awilix.asClass(UserService),
     userController: awilix.asClass(UserController),
