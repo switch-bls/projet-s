@@ -1,4 +1,4 @@
-const createError = require('http-errors');
+
 require('dotenv').config()
 const jwt = require('../utils/jwt');
 
@@ -49,7 +49,6 @@ class UserController {
         try {
             console.log('Current User Getter Service Requested')
             const data = jwt.getDataFromToken(req.headers.authorization)
-            console.log(data)
             const me = await this.userService.userById(data.payload.id);
             res.status(200).json({
                 status: true,
@@ -87,7 +86,7 @@ class UserController {
         try {
             console.log('User Deletion Service Requested')
             const id_to_delete = jwt.getDataFromToken(req.headers.authorization).payload.id
-            await user.deleteById(id_to_delete);
+            await this.userService.deleteById(id_to_delete);
             res.status(200).json({
                 status: true,
                 message: 'User Succesfully Deleted',

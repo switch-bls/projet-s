@@ -3,8 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
+  "jest": {
+    "verbose": true
+  },
   "scripts": {
-    "test": "jest --forceExit --detectOpenHandles  --watchAll --maxWorkers=1"
+    "test": "jest --forceExit --detectOpenHandles  --watchAll --maxWorkers=1 --verbose --collectCoverage"
   },
   "author": "",
   "license": "ISC",
