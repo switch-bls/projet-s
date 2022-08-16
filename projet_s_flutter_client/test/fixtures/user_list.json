@@ -1,0 +1,26 @@
+{
+    "status": true,
+    "message": "All users",
+    "data": [
+        {
+            "id": 69,
+            "email": "aliceb@mail.com",
+            "firstname": "Alice",
+            "lastname": "Bumbstead",
+            "pseudo": "al50",
+            "password": "$2a$08$eLtiKfGz2KDqBidw3a2.jemoczL8pMEZAA2GNZZ03ffmEyDsswPsm",
+            "createdAt": "2022-07-18T12:21:59.769Z",
+            "updatedAt": "2022-07-18T12:21:59.770Z"
+        },
+        {
+            "id": 89,
+            "email": "bobybob@mail.com",
+            "firstname": "Bob",
+            "lastname": "Dupont",
+            "pseudo": "boby",
+            "password": "jkljkljkl;jkl;",
+            "createdAt": "2022-08-11T13:41:07.000Z",
+            "updatedAt": "2022-08-11T13:41:26.000Z"
+        }
+    ]
+}
